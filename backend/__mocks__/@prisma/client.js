@@ -1,3 +1,4 @@
+// __mocks__/@prisma/client.js
 import { jest } from '@jest/globals';
 
 export const PrismaClient = jest.fn(() => ({
@@ -15,4 +16,27 @@ export const PrismaClient = jest.fn(() => ({
       createdAt: new Date(),
     }),
   },
+  pet: {
+    findMany: jest.fn().mockResolvedValue([
+      {
+        id: 101,
+        name: 'Emma',
+        species: 'Dog',
+        age: 6,
+        breed: 'Mini Schnauzer',
+        userId: 4,
+      },
+      {
+        id: 102,
+        name: 'Luna',
+        species: 'Cat',
+        age: 3,
+        breed: 'Black Cat',
+        userId: 4,
+      },
+    ]),
+    deleteMany: jest.fn().mockResolvedValue(undefined),
+    createMany: jest.fn().mockResolvedValue(undefined),
+  },
+  $disconnect: jest.fn().mockResolvedValue(undefined),
 }));

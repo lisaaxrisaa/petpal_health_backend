@@ -3,7 +3,6 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import users from './routes/users.js';
-import petRoutes from './routes/pets.js';
 
 dotenv.config();
 
@@ -14,6 +13,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.use('/users', users);
-app.use('/pets', petRoutes);
+
+const setup = async () => {
+  const petRoutes = (await import('./routes/pets.js')).default;
+  app.use('/pets', petRoutes);
+};
+
+await setup();
 
 export default app;

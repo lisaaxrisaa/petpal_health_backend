@@ -80,7 +80,7 @@ If you see [], make sure you’ve run the seed script:
 node seed.js
 ```
 
-### ✅ This confirms that:
+### This confirms that:
 
 - The server is running
 
@@ -88,18 +88,88 @@ node seed.js
 
 - Prisma is able to fetch from the database
 
-### API Routes
+# 📘 API Routes – PetPal Health
 
-#### GET /pets
+These routes power the PetPal Health backend. All endpoints that modify or access user-specific data require a valid JWT token.
 
-Returns all pets belonging to the logged-in user.
+---
 
-- **Endpoint:** `/pets`
+## Auth & Users
+
+### `POST /users` – Register a new user
+
+Registers a new user account.
+
+- **Method:** `POST`
+- **Endpoint:** `/users`
+- **Request Body:**
+
+```json
+{
+  "firstName": "Emma",
+  "lastName": "Fujita",
+  "email": "emma@example.com",
+  "password": "securePassword123"
+}
+```
+
+- **Response (201 Created):**
+
+```json
+{
+  "id": 1,
+  "firstName": "Emma",
+  "lastName": "Fujita",
+  "email": "emma@example.com",
+  "createdAt": "2025-06-13T15:24:00.000Z"
+}
+```
+
+---
+
+### `POST /login` – Authenticate a user
+
+Returns a JWT token upon successful login.
+
+- **Method:** `POST`
+- **Endpoint:** `/login`
+- **Request Body:**
+
+```json
+{
+  "email": "emma@example.com",
+  "password": "securePassword123"
+}
+```
+
+- **Response:**
+
+```json
+{
+  "message": "Login successful",
+  "token": "<jwt_token>",
+  "user": {
+    "id": 1,
+    "email": "emma@example.com",
+    "firstName": "Emma",
+    "lastName": "Fujita"
+  }
+}
+```
+
+---
+
+## Pets
+
+### `GET /pets` – Get all pets for logged-in user
+
 - **Method:** `GET`
+- **Endpoint:** `/pets`
 - **Headers:**
+
   - `Authorization: Bearer <your_token_here>`
 
-**Response Example:**
+- **Response:**
 
 ```json
 [
@@ -115,44 +185,15 @@ Returns all pets belonging to the logged-in user.
 ]
 ```
 
-#### POST /users
+---
 
-Registers a new user.
+### `PUT /pets/:id` – Update pet
 
-- **Endpoint:** `/users`
-- **Method:** `POST`
-- **Request Body (JSON):**
-
-```json
-{
-  "firstName": "Emma",
-  "lastName": "Fujita",
-  "email": "emma@example.com",
-  "password": "securePassword123"
-}
-```
-
-- **Response (201 Created):**
-
-  ```json
-  {
-    "id": 1,
-    "firstName": "Emma",
-    "lastName": "Fujita",
-    "email": "emma@example.com",
-    "createdAt": "2025-06-13T15:24:00.000Z"
-  }
-  ```
-
-#### PUT /pets/:id
-
-Update an existing pet’s information. Only works for pets owned by the logged-in user.
-
-- **Endpoint:** `/pets/:id`
 - **Method:** `PUT`
+- **Endpoint:** `/pets/:id`
 - **Headers:**
-  - `Authorization: Bearer <your_token>`
-- **Body:**
+  - `Authorization: Bearer <your_token_here>`
+- **Request Body:**
 
 ```json
 {
@@ -165,56 +206,37 @@ Update an existing pet’s information. Only works for pets owned by the logged-
 
 - **Response:**
 
-  ```json
-  { "message": "Pet updated" }
-  ```
-
-#### PUT /pets/:id
-
-Update an existing pet’s information. Only works for pets owned by the logged-in user.
-
-- **Endpoint:** `/pets/:id`
-- **Method:** `PUT`
-- **Headers:**
-  - `Authorization: Bearer <your_token>`
-- **Body:**
-
 ```json
 {
-  "name": "Emma",
-  "species": "Dog",
-  "breed": "Mini Schnauzer",
-  "age": 8
+  "message": "Pet updated"
 }
 ```
 
-- **Response:**
+---
 
-  ```json
-  { "message": "Pet updated" }
-  ```
+### `DELETE /pets/:id` – Delete pet
 
-#### DELETE /pets/:id
-
-Delete a pet owned by the logged-in user.
-
-- **Endpoint:** `/pets/:id`
 - **Method:** `DELETE`
+- **Endpoint:** `/pets/:id`
 - **Headers:**
 
-  - `Authorization: Bearer <your_token>`
+  - `Authorization: Bearer <your_token_here>`
 
 - **Response:**
 
-  ```json
-  { "message": "Pet deleted" }
-  ```
+```json
+{
+  "message": "Pet deleted"
+}
+```
 
-- **Notes:**
+---
 
-- Passwords are securely hashed using bcrypt before being saved.
+## Notes
 
-- Email must be unique, or the server returns a 409 Conflict.
+- Passwords are securely hashed with bcrypt.
+- All sensitive routes require a valid JWT token in the `Authorization` header.
+- Duplicate email registration returns a `409 Conflict`.
 
 ## Testing
 

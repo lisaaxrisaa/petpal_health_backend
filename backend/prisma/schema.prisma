@@ -25,6 +25,8 @@ model Pet {
   breed     String?
   age       Int?
   userId    Int
+  weight    Float?
+  notes    String?
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
 }

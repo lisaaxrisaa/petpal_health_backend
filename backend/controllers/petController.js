@@ -74,7 +74,10 @@ export const deletePet = async (req, res) => {
       return res.status(404).json({ error: 'Pet not found or not yours' });
     }
 
-    res.status(200).json({ message: 'Pet deleted' });
+    res.status(200).json({
+      message: 'Pet deleted successfully',
+      petId: Number(req.params.id),
+    });
   } catch (error) {
     console.error('Error deleting pet:', error);
     res.status(500).json({ error: 'Server error' });
