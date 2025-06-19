@@ -29,5 +29,22 @@ model Pet {
   notes    String?
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+   healthLogs  HealthLog[]
 }
+
+model HealthLog {
+  id               Int       @id @default(autoincrement())
+  date             DateTime
+  notes            String
+  condition        String?
+  medicationsGiven String?
+  vetVisit         Boolean   @default(false)
+  petName          String
+  createdAt        DateTime  @default(now())
+  pet              Pet       @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId            Int
+
+  @@index([petId])
+}
+
 
