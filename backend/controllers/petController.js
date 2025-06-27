@@ -3,15 +3,17 @@ const prisma = new PrismaClient();
 
 export const createPet = async (req, res) => {
   try {
-    const { name, species, breed, age } = req.body;
+    const { name, species, breed, age, weight, notes } = req.body;
     const userId = req.user.userId;
 
     const newPet = await prisma.pet.create({
       data: {
         name,
         species,
-        breed,
-        age,
+        breed: breed || null,
+        age: age ? parseInt(age) : null,
+        weight: weight ? parseFloat(weight) : null,
+        notes: notes || null,
         userId,
       },
     });

@@ -1,4 +1,3 @@
-// __mocks__/@prisma/client.js
 import { jest } from '@jest/globals';
 
 export const PrismaClient = jest.fn(() => ({

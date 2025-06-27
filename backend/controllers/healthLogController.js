@@ -13,6 +13,10 @@ export const createHealthLog = async (req, res) => {
       petId,
     } = req.body;
 
+    if (!petId) {
+      return res.status(400).json({ error: 'petId is required' });
+    }
+
     const newLog = await prisma.healthLog.create({
       data: {
         date: new Date(date),
@@ -21,7 +25,7 @@ export const createHealthLog = async (req, res) => {
         medicationsGiven,
         vetVisit,
         petName,
-        petId,
+        petId: parseInt(petId),
       },
     });
 
