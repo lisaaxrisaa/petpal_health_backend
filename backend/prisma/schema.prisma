@@ -30,6 +30,7 @@ model Pet {
   user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
    healthLogs  HealthLog[]
+   medications Medication[]
 }
 
 model HealthLog {
@@ -47,4 +48,20 @@ model HealthLog {
   @@index([petId])
 }
 
+model Medication {
+  id                 Int      @id @default(autoincrement())
+  petId              Int
+  petName            String?
+  date               DateTime
+  time               String?
+  vetName            String?
+  drugName           String
+  dosage             String?
+  duration           String?
+  instructions       String?
+  purpose            String?
+  notes              String?
+  createdAt          DateTime @default(now())
+  pet                Pet      @relation(fields: [petId], references: [id])
+}
 
