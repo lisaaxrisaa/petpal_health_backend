@@ -10,7 +10,7 @@ export const createMedication = async (req, res) => {
       drugName,
       dosage,
       duration,
-      administration,
+      instructions,
       notes,
       purpose,
       time,
@@ -25,13 +25,13 @@ export const createMedication = async (req, res) => {
 
     const newMedication = await prisma.medication.create({
       data: {
-        date: new Date(date),
+        date: new Date(date + 'T00:00:00'),
         vetName,
         petName,
         drugName,
         dosage,
         duration,
-        administration,
+        instructions,
         notes,
         purpose,
         time,
@@ -89,7 +89,7 @@ export const updateMedication = async (req, res) => {
     } = req.body;
 
     const updatedData = {
-      date: new Date(date),
+      date: new Date(date + 'T00:00:00'),
       vetName,
       petName,
       drugName,

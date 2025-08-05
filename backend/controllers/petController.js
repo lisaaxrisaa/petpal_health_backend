@@ -44,12 +44,19 @@ export const getUserPets = async (req, res) => {
 export const updatePet = async (req, res) => {
   const petId = parseInt(req.params.id);
   const userId = req.user.userId;
-  const { name, species, breed, age } = req.body;
+  const { name, species, breed, age, weight, notes } = req.body;
 
   try {
     const updatedPet = await prisma.pet.updateMany({
       where: { id: petId, userId },
-      data: { name, species, breed, age },
+      data: { 
+        name, 
+        species, 
+        breed: breed || null, 
+        age: age ? parseInt(age) : null,
+        weight: weight ? parseFloat(weight) : null,
+        notes: notes || null
+      },
     });
 
     if (updatedPet.count === 0) {

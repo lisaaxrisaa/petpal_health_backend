@@ -31,6 +31,9 @@ model Pet {
   createdAt DateTime @default(now())
    healthLogs  HealthLog[]
    medications Medication[]
+   insurance   Insurance[]
+   foodEntries FoodEntry[]
+   vaccines    Vaccine[]
 }
 
 model HealthLog {
@@ -65,3 +68,74 @@ model Medication {
   pet                Pet      @relation(fields: [petId], references: [id])
 }
 
+model Insurance {
+  id                     Int      @id @default(autoincrement())
+  petId                  Int
+  petName                String?
+  provider               String   // e.g., "FIGO", "Petplan"
+  policyNumber           String
+  status                 String   @default("Active") // Active, Inactive, Expired
+  policyStartDate        DateTime
+  policyEndDate          DateTime
+  annualCoverageLimit    Float?   // e.g., 10000.00
+  reimbursementPercent   Int?     // e.g., 70
+  deductibleAmount       Float?   // e.g., 700.00
+  monthlyPremium         Float?   // e.g., 44.39
+  vetExamFees            Boolean  @default(false)
+  wellnessCoverage       Boolean  @default(false)
+  rehabCoverage          Boolean  @default(false)
+  extraCarePack          Boolean  @default(false)
+  nextBillingDate        DateTime?
+  notes                  String?
+  createdAt              DateTime @default(now())
+  pet                    Pet      @relation(fields: [petId], references: [id])
+
+  @@index([petId])
+}
+
+model FoodEntry {
+  id                     Int      @id @default(autoincrement())
+  petId                  Int
+  petName                String?
+  date                   DateTime
+  time                   String?  // e.g., "8:00 AM", "12:00 PM"
+  mealType               String?  // e.g., "Breakfast", "Lunch", "Dinner", "Treat", "Snack"
+  foodBrand              String   // e.g., "Royal Canin", "Hill's Science Diet"
+  foodType               String?  // e.g., "Dry kibble", "Wet food", "Raw", "Treats"
+  amount                 String?  // e.g., "1 cup", "2 oz", "1/2 can"
+  calories               Int?     // estimated calories
+  appetite               String?  // e.g., "Ate all", "Ate some", "Refused", "Left half"
+  allergicReaction       Boolean  @default(false)
+  allergySymptoms        String?  // e.g., "Itching", "Vomiting", "Diarrhea", "Skin rash"
+  allergyNotes           String?  // Additional allergy-related observations
+  notes                  String?  // General notes about the feeding
+  createdAt              DateTime @default(now())
+  pet                    Pet      @relation(fields: [petId], references: [id])
+
+  @@index([petId])
+}
+
+model Vaccine {
+  id                     Int      @id @default(autoincrement())
+  petId                  Int
+  petName                String?
+  vaccineName            String   // e.g., "Rabies", "DHPP", "Bordetella", "FVRCP"
+  brandName              String?  // e.g., "Nobivac", "Vanguard"
+  dateAdministered       DateTime
+  expirationDate         DateTime? // When the vaccine expires
+  nextDueDate            DateTime? // When next dose is due
+  vetClinic              String?  // Administering vet clinic
+  veterinarian           String?  // Administering veterinarian
+  batchLotNumber         String?  // Vaccine batch/lot number
+  doseNumber             Int?     // e.g., 1st dose, 2nd dose (for multi-dose vaccines)
+  totalDoses             Int?     // Total doses required for this vaccine series
+  vaccineType            String?  // e.g., "Core", "Non-core", "Required by law"
+  sideEffects            String?  // Any observed side effects
+  cost                   Float?   // Cost of the vaccine
+  notes                  String?  // Additional notes
+  createdAt              DateTime @default(now())
+  pet                    Pet      @relation(fields: [petId], references: [id])
+
+  @@index([petId])
+  @@index([nextDueDate])
+}

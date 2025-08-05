@@ -89,7 +89,7 @@ export const updateHealthLog = async (req, res) => {
       data: {
         petId: Number(petId),
         petName,
-        date: new Date(date),
+        date: new Date(date + 'T00:00:00'),
         notes,
         condition,
         medicationsGiven,
